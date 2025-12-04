@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMI Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5e6ff 0%, #f5f0e8 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(147, 112, 219, 0.2);
+            max-width: 900px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #7d5ba6;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #8b7355;
+            font-size: 14px;
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-group label {
+            color: #7d5ba6;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e6d9f0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #faf8fc;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #9b7ec4;
+            background: white;
+        }
+
+        .input-suffix {
+            position: absolute;
+            right: 15px;
+            color: #8b7355;
+            font-weight: 600;
+        }
+
+        .calculate-btn {
+            background: linear-gradient(135deg, #9b7ec4 0%, #7d5ba6 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 10px;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(147, 112, 219, 0.4);
+        }
+
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+
+        .results-section {
+            background: linear-gradient(135deg, #f5e6ff 0%, #f5f0e8 100%);
+            border-radius: 15px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .result-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #9b7ec4;
+            transition: transform 0.2s ease;
+        }
+
+        .result-card:hover {
+            transform: translateX(5px);
+        }
+
+        .result-label {
+            color: #8b7355;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .result-value {
+            color: #7d5ba6;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .breakdown-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e6d9f0;
+        }
+
+        .breakdown-title {
+            color: #7d5ba6;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0e8f5;
+        }
+
+        .breakdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-label {
+            color: #8b7355;
+            font-weight: 500;
+        }
+
+        .breakdown-value {
+            color: #7d5ba6;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 25px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>EMI Calculator</h1>
+            <p>Calculate your Equated Monthly Installment easily</p>
+        </div>
+
+        <div class="calculator-grid">
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="loanAmount">Loan Amount</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="loanAmount" placeholder="Enter loan amount" value="500000">
+                        <span class="input-suffix">₹</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="interestRate">Interest Rate (per annum)</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="interestRate" placeholder="Enter interest rate" value="10" step="0.1">
+                        <span class="input-suffix">%</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="loanTenure">Loan Tenure</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="loanTenure" placeholder="Enter tenure" value="24">
+                        <span class="input-suffix">Months</span>
+                    </div>
+                </div>
+
+                <button class="calculate-btn" onclick="calculateEMI()">Calculate EMI</button>
+            </div>
+
+            <div class="results-section">
+                <div class="result-card">
+                    <div class="result-label">Monthly EMI</div>
+                    <div class="result-value" id="emiResult">₹0</div>
+                </div>
+
+                <div class="result-card">
+                    <div class="result-label">Total Interest</div>
+                    <div class="result-value" id="interestResult">₹0</div>
+                </div>
+
+                <div class="result-card">
+                    <div class="result-label">Total Amount</div>
+                    <div class="result-value" id="totalResult">₹0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="breakdown-section">
+            <div class="breakdown-title">Payment Breakdown</div>
+            <div class="breakdown-item">
+                <span class="breakdown-label">Principal Amount</span>
+                <span class="breakdown-value" id="principalBreakdown">₹0</span>
+            </div>
+            <div class="breakdown-item">
+                <span class="breakdown-label">Total Interest Payable</span>
+                <span class="breakdown-value" id="interestBreakdown">₹0</span>
+            </div>
+            <div class="breakdown-item">
+                <span class="breakdown-label">Total Payment</span>
+                <span class="breakdown-value" id="totalBreakdown">₹0</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculateEMI() {
+            // Get input values
+            const principal = parseFloat(document.getElementById('loanAmount').value);
+            const annualRate = parseFloat(document.getElementById('interestRate').value);
+            const tenureMonths = parseFloat(document.getElementById('loanTenure').value);
+
+            // Validate inputs
+            if (isNaN(principal) || isNaN(annualRate) || isNaN(tenureMonths) || 
+                principal <= 0 || annualRate < 0 || tenureMonths <= 0) {
+                alert('Please enter valid positive numbers for all fields');
+                return;
+            }
+
+            // Calculate monthly interest rate
+            const monthlyRate = annualRate / (12 * 100);
+
+            // EMI Formula: P × r × (1 + r)^n / ((1 + r)^n - 1)
+            let emi;
+            if (monthlyRate === 0) {
+                emi = principal / tenureMonths;
+            } else {
+                emi = principal * monthlyRate * Math.pow(1 + monthlyRate, tenureMonths) / 
+                      (Math.pow(1 + monthlyRate, tenureMonths) - 1);
+            }
+
+            // Calculate totals
+            const totalAmount = emi * tenureMonths;
+            const totalInterest = totalAmount - principal;
+
+            // Display results
+            document.getElementById('emiResult').textContent = '₹' + emi.toLocaleString('en-IN', {maximumFractionDigits: 2});
+            document.getElementById('interestResult').textContent = '₹' + totalInterest.toLocaleString('en-IN', {maximumFractionDigits: 2});
+            document.getElementById('totalResult').textContent = '₹' + totalAmount.toLocaleString('en-IN', {maximumFractionDigits: 2});
+
+            // Update breakdown
+            document.getElementById('principalBreakdown').textContent = '₹' + principal.toLocaleString('en-IN', {maximumFractionDigits: 2});
+            document.getElementById('interestBreakdown').textContent = '₹' + totalInterest.toLocaleString('en-IN', {maximumFractionDigits: 2});
+            document.getElementById('totalBreakdown').textContent = '₹' + totalAmount.toLocaleString('en-IN', {maximumFractionDigits: 2});
+        }
+
+        // Calculate on page load with default values
+        window.onload = function() {
+            calculateEMI();
+        };
+    </script>
+</body>
+</html>
